@@ -1,0 +1,48 @@
+.rhs--loadMore {
+  clear: left;
+  text-align: center;
+}
+.rhs--loadMore > .rhs--loadMore--button {
+  padding: 1px 4px;
+  background: rgb(238 238 238);
+  border: 1px solid rgb(221 221 221);
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 2em;
+}
+#siteTable > .thing.rhs--thing {
+  position: relative;
+}
+#siteTable > .thing.rhs--thing:before {
+  color: rgb(198 198 198);
+  display: block;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  text-align: center;
+  text-overflow: ellipsis;
+  top: 0;
+  white-space: nowrap;
+  width: 36px;
+}
+#siteTable > .thing.rhs--thing.rhs--best:before {
+  content: "best";
+}
+#siteTable > .thing.rhs--thing.rhs--hot:before {
+  content: "hot";
+}
+#siteTable > .thing.rhs--thing.rhs--new:before {
+  content: "new";
+}
+#siteTable > .thing.rhs--thing.rhs--rising:before {
+  content: "rising";
+}
+#siteTable > .thing.rhs--thing.rhs--controversial:before {
+  content: "controversial";
+}
+#siteTable > .thing.rhs--thing.rhs--top:before {
+  content: "top";
+}
+#siteTable > .thing.rhs--thing.rhs--gilded:before {
+  content: "gilded";
+}

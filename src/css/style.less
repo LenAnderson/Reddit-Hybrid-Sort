@@ -1,0 +1,38 @@
+.rhs--loadMore {
+	clear: left;
+	text-align: center;
+	> .rhs--loadMore--button {
+		padding: 1px 4px;
+		background: rgb(238 238 238);
+		border: 1px solid rgb(221 221 221);
+		border-radius: 3px;
+		font-weight: bold;
+		font-size: 2em;
+	}
+}
+
+
+
+
+#siteTable > .thing.rhs--thing {
+	position: relative;
+	&:before {
+		color: rgb(198 198 198);
+		display: block;
+		left: 0;
+		overflow: hidden;
+		position: absolute;
+		text-align: center;
+		text-overflow: ellipsis;
+		top: 0;
+		white-space: nowrap;
+		width: 36px;
+	}
+	&.rhs--best:before { content: "best"; }
+	&.rhs--hot:before { content: "hot"; }
+	&.rhs--new:before { content: "new"; }
+	&.rhs--rising:before { content: "rising"; }
+	&.rhs--controversial:before { content: "controversial"; }
+	&.rhs--top:before { content: "top"; }
+	&.rhs--gilded:before { content: "gilded"; }
+}
