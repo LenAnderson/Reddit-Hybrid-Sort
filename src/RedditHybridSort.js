@@ -90,9 +90,17 @@ class RedditHybridSort {
 			loadMore.classList.add('rhs--loadMore');
 			const btn = document.createElement('a'); {
 				btn.classList.add('rhs--loadMore--button');
-				btn.textContent = 'Load More';
 				btn.href = 'javascript:;';
 				btn.addEventListener('click', ()=>this.loadPosts());
+				const lbl = document.createElement('span'); {
+					lbl.classList.add('rhs--label');
+					lbl.textContent = 'Load More';
+					btn.appendChild(lbl);
+				}
+				const spinner = document.createElement('span'); {
+					spinner.classList.add('rhs--spinner');
+					btn.appendChild(spinner);
+				}
 				loadMore.appendChild(btn);
 			}
 			this.siteTable.appendChild(loadMore);
@@ -137,6 +145,7 @@ class RedditHybridSort {
 
 
 	async loadPosts() {
+		this.loadMore.classList.add('rhs--loading');
 		if (this.handlers.filter(it=>it.after).length) {
 			history.replaceState(null, '', `https://www.reddit.com/?rhsSort=${this.sorts.join(',')}&rhsAfter=${this.handlers.map(it=>it.after).join(',')}&rhsCount=${this.handlers.map(it=>it.things.length).join(',')}`);
 		}
@@ -165,5 +174,7 @@ class RedditHybridSort {
 		}
 		this.afterClass = `rhs--after-${Math.pow(10, Math.floor(maxCount/10).toString().length)}`;
 		document.body.classList.add(this.afterClass);
+
+		this.loadMore.classList.remove('rhs--loading');
 	}
 }

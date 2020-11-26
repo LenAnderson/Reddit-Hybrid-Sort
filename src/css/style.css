@@ -4,12 +4,45 @@
   padding-left: 20px;
 }
 .rhs--loadMore > .rhs--loadMore--button {
-  padding: 1px 4px;
   background: rgb(238 238 238);
   border: 1px solid rgb(221 221 221);
   border-radius: 3px;
+  display: inline-block;
   font-weight: bold;
   font-size: 2em;
+  padding: 1px 4px;
+  text-align: center;
+  width: 150px;
+}
+.rhs--loadMore > .rhs--loadMore--button > .rhs--spinner {
+  display: none;
+}
+.rhs--loadMore > .rhs--loadMore--button > .rhs--spinner:before {
+  content: ".";
+  display: inline-block;
+}
+.rhs--loadMore.rhs--loading > .rhs--loadMore--button > .rhs--label {
+  display: none;
+}
+.rhs--loadMore.rhs--loading > .rhs--loadMore--button > .rhs--spinner {
+  cursor: progress;
+  display: inline;
+}
+.rhs--loadMore.rhs--loading > .rhs--loadMore--button > .rhs--spinner:before {
+  animation-name: rhs--spinner;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+@keyframes rhs--spinner {
+  0% {
+    content: '.';
+  }
+  25% {
+    content: '..';
+  }
+  75% {
+    content: '...';
+  }
 }
 #siteTable > .thing.rhs--thing {
   position: relative;
