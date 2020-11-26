@@ -1,7 +1,8 @@
+${include: SortHandler.js}
 class RedditHybridSort {
 	constructor() {
 		this.sorts = [''];
-		this.siteTable = $('#siteTable')
+		this.siteTable = $('#siteTable');
 
 		this.loadMore = null;
 
@@ -13,6 +14,10 @@ class RedditHybridSort {
 			css.innerHTML = '${include-min-esc: css/style.css}';
 			document.body.appendChild(css);
 		}
+
+		this.afterClass = null;
+
+		this.handlers = [];
 
 		this.loadConfig();
 		
@@ -37,17 +42,48 @@ class RedditHybridSort {
 
 
 
+	parseParams() {
+		if (location.search.length > 1) {
+			const url = location.search.substring(1).split('&').map(it=>it.split('=')).map(it=>[it[0],it[1].split(',')])
+			const params = {
+				sorts: url.find(it=>it[0] == 'rhsSort')[1],
+				afters: url.find(it=>it[0] == 'rhsAfter')[1],
+				counts: url.find(it=>it[0] == 'rhsCount')[1]
+			};
+			log(params);
+			if (params.sorts && params.afters && params.counts) {
+				return params;
+			}
+		}
+		return null;
+	}
+
+
+
+
 	init() {
 		this.siteTable.innerHTML = '';
+		
+		const params = this.parseParams();
+		if (params) {
+			this.sorts = params.sorts;
+		}
+		
+		this.handlers = this.sorts.map(sort=>new SortHandler(sort));
 
-		this.count = [];
-		this.after = [];
-		this.things = [];
-		this.sorts.forEach(it=>{
-			this.count.push(null);
-			this.after.push(null);
-			this.things.push([]);
-		});
+		if (params) {
+			this.handlers.forEach((handler, idx)=>{
+				for (let i = 0; i < params.counts[idx]; i++) {
+					if (i+1 == params.counts[idx]) {
+						const el = document.createElement('div');
+						el.setAttribute('data-fullname', params.afters[idx]);
+						handler.things.push(el);
+					} else {
+						handler.things.push(null);
+					}
+				}
+			});
+		}
 
 		const loadMore = document.createElement('div'); {
 			this.loadMore = loadMore;
@@ -93,6 +129,7 @@ class RedditHybridSort {
 	reload() {
 		this.sorts = this.config.filter(it=>it.classList.contains('selected')).map(it=>it.children[0].href.replace(/^https:\/\/www\.reddit\.com\/?(?:\/([^\/]+).*)?$/, '$1'));
 		this.saveConfig();
+		history.replaceState(null, '', location.href.substring(0, location.href.length - location.search.length));
 		this.init();
 	}
 
@@ -100,24 +137,33 @@ class RedditHybridSort {
 
 
 	async loadPosts() {
-		const pages = await Promise.all(this.sorts.map((sort,idx) => getHtml(`https://www.reddit.com/${sort}/?count=${this.count[idx]}&after=${this.after[idx]}`)));
-		const postLists = pages.map(page=>Array.from(page.querySelectorAll('#siteTable > .thing')).filter(thing=>!thing.classList.contains('promotedlink')));
-		for (let index = 0; index < postLists.reduce((prev, curr)=>Math.max(prev,curr.length),0); index++) {
-			postLists.forEach((list,idx)=>{
-				if (list.length > index) {
-					const thing = list[index];
-					thing.classList.add('rhs--thing');
-					thing.classList.add(`rhs--${this.sorts[idx]||'best'}`);
+		if (this.handlers.filter(it=>it.after).length) {
+			history.replaceState(null, '', `https://www.reddit.com/?rhsSort=${this.sorts.join(',')}&rhsAfter=${this.handlers.map(it=>it.after).join(',')}&rhsCount=${this.handlers.map(it=>it.things.length).join(',')}`);
+		}
+		const thingsList = await Promise.all(this.handlers.map(handler=>handler.loadMore()));
+
+		let first = null;
+
+		for (let thingIdx = 0; thingIdx < thingsList.reduce((prev, curr)=>Math.max(prev,curr.length),0); thingIdx++) {
+			thingsList.forEach((list,sortIdx)=>{
+				if (list.length > thingIdx) {
+					const thing = list[thingIdx];
 					this.siteTable.insertBefore(thing, this.loadMore);
-					this.things[idx].push(thing);
+					if (!first) {
+						first = thing;
+					}
 				}
 			});
 		}
-		this.count = this.things.map(list=>list.length);
-		this.after = postLists.map(list=>list.slice(-1)[0].getAttribute('data-fullname'));
-		const first = postLists.filter(it=>it.length);
-		if (first.length > 0) {
-			first[0][0].scrollIntoViewIfNeeded();
+		if (first) {
+			first.scrollIntoViewIfNeeded();
 		}
+
+		const maxCount = this.handlers.reduce((max, handler)=>Math.max(max, handler.things.length), 0);
+		if (this.afterClass) {
+			document.body.classList.remove(this.afterClass);
+		}
+		this.afterClass = `rhs--after-${Math.pow(10, Math.floor(maxCount/10).toString().length)}`;
+		document.body.classList.add(this.afterClass);
 	}
 }

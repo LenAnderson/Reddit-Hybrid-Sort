@@ -46,3 +46,15 @@
 #siteTable > .thing.rhs--thing.rhs--gilded:before {
   content: "gilded";
 }
+body.rhs--after-100 > .content .link .rank,
+body.rhs--after-100 > .rank-spacer {
+  width: 3.3ex;
+}
+body.rhs--after-1000 > .content .link .rank,
+body.rhs--after-1000 > .rank-spacer {
+  width: 4.4ex;
+}
+body.rhs--after-10000 > .content .link .rank,
+body.rhs--after-10000 > .rank-spacer {
+  width: 5.5ex;
+}
