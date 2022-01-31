@@ -2,6 +2,7 @@ class SortHandler {
 	constructor(sort) {
 		this.sort = sort;
 		this.things = [];
+		this.ids = [];
 		this.reachedEnd = false;
 	}
 
@@ -27,9 +28,10 @@ class SortHandler {
 		}
 
 		const html = await getHtml(`https://www.reddit.com/${this.sort}/?count=${this.things.length}&after=${this.after}`);
-		const things = Array.from(html.querySelectorAll('#siteTable > .thing')).filter(thing=>!thing.classList.contains('promotedlink'));
+		const things = Array.from(html.querySelectorAll('#siteTable > .thing')).filter(thing=>!thing.classList.contains('promotedlink')).filter(it=>this.ids.indexOf(it.id)==-1);
 		this.prepareThings(things);
 		this.things.push(...things);
+		this.ids = things.map(it=>it.id);
 		if (things.length == 0) {
 			this.reachedEnd = true;
 		}
