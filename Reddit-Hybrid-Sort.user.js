@@ -2,7 +2,7 @@
 // @name         Reddit - Hybrid Sort
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/Reddit-Hybrid-Sort/raw/master/Reddit-Hybrid-Sort.user.js
-// @version      1.1.0
+// @version      1.2.0
 // @author       LenAnderson
 // @match        https://www.reddit.com/
 // @match        https://www.reddit.com/?*
@@ -50,6 +50,7 @@
 	constructor(sort) {
 		this.sort = sort;
 		this.things = [];
+		this.ids = [];
 		this.reachedEnd = false;
 	}
 
@@ -75,9 +76,10 @@
 		}
 
 		const html = await getHtml(`https://www.reddit.com/${this.sort}/?count=${this.things.length}&after=${this.after}`);
-		const things = Array.from(html.querySelectorAll('#siteTable > .thing')).filter(thing=>!thing.classList.contains('promotedlink'));
+		const things = Array.from(html.querySelectorAll('#siteTable > .thing')).filter(thing=>!thing.classList.contains('promotedlink')).filter(it=>this.ids.indexOf(it.id)==-1);
 		this.prepareThings(things);
 		this.things.push(...things);
+		this.ids = things.map(it=>it.id);
 		if (things.length == 0) {
 			this.reachedEnd = true;
 		}
