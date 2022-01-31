@@ -2,7 +2,7 @@
 // @name         Reddit - Hybrid Sort
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/Reddit-Hybrid-Sort/raw/master/Reddit-Hybrid-Sort.user.js
-// @version      1.1.0
+// @version      1.2.0
 // @author       LenAnderson
 // @match        https://www.reddit.com/
 // @match        https://www.reddit.com/?*
