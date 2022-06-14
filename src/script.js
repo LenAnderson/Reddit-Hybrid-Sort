@@ -9,6 +9,10 @@
 // @grant        none
 // ==/UserScript==
 
+import { RedditHybridSort } from "./RedditHybridSort.js";
+
+
+
 (()=>{
 	'use strict';
 
@@ -44,8 +48,11 @@
 	const wait = async(millis)=>new Promise(resolve=>setTimeout(resolve, millis));
 
 
+	// ${imports}
 
 
-	${include: RedditHybridSort.js}
+
+
+	
 	const app = new RedditHybridSort();
 })();

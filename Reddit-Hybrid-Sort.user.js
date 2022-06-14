@@ -9,6 +9,10 @@
 // @grant        none
 // ==/UserScript==
 
+
+
+
+
 (()=>{
 	'use strict';
 
@@ -43,10 +47,12 @@
 
 	const wait = async(millis)=>new Promise(resolve=>setTimeout(resolve, millis));
 
+// ---------------- IMPORTS  ----------------
 
 
 
-	class SortHandler {
+// src\SortHandler.js
+class SortHandler {
 	constructor(sort) {
 		this.sort = sort;
 		this.things = [];
@@ -94,6 +100,11 @@
 		});
 	}
 }
+
+
+// src\RedditHybridSort.js
+
+
 class RedditHybridSort {
 	constructor() {
 		this.sorts = [''];
@@ -273,5 +284,12 @@ class RedditHybridSort {
 		this.loadMore.classList.remove('rhs--loading');
 	}
 }
+// ---------------- /IMPORTS ----------------
+
+
+
+
+
+	
 	const app = new RedditHybridSort();
 })();

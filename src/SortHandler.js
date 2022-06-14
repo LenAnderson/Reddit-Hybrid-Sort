@@ -1,4 +1,4 @@
-class SortHandler {
+export class SortHandler {
 	constructor(sort) {
 		this.sort = sort;
 		this.things = [];

@@ -1,5 +1,6 @@
-${include: SortHandler.js}
-class RedditHybridSort {
+import { SortHandler } from "./SortHandler.js";
+
+export class RedditHybridSort {
 	constructor() {
 		this.sorts = [''];
 		this.siteTable = $('#siteTable');
