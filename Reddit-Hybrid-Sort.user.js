@@ -2,7 +2,7 @@
 // @name         Reddit - Hybrid Sort
 // @namespace    https://github.com/LenAnderson/
 // @downloadURL  https://github.com/LenAnderson/Reddit-Hybrid-Sort/raw/master/Reddit-Hybrid-Sort.user.js
-// @version      1.2.0
+// @version      1.3.0
 // @author       LenAnderson
 // @match        https://www.reddit.com/
 // @match        https://www.reddit.com/?*
@@ -107,6 +107,7 @@ class SortHandler {
 
 class RedditHybridSort {
 	constructor() {
+		this.thingIds = [];
 		this.sorts = [''];
 		this.siteTable = $('#siteTable');
 
@@ -263,9 +264,12 @@ class RedditHybridSort {
 			thingsList.forEach((list,sortIdx)=>{
 				if (list.length > thingIdx) {
 					const thing = list[thingIdx];
-					this.siteTable.insertBefore(thing, this.loadMore);
-					if (!first) {
-						first = thing;
+					if (this.thingIds.indexOf(thing.id) == -1) {
+						this.thingIds.push(thing.id);
+						this.siteTable.insertBefore(thing, this.loadMore);
+						if (!first) {
+							first = thing;
+						}
 					}
 				}
 			});
