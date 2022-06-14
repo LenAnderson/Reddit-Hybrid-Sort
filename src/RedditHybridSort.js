@@ -2,6 +2,7 @@ import { SortHandler } from "./SortHandler.js";
 
 export class RedditHybridSort {
 	constructor() {
+		this.thingIds = [];
 		this.sorts = [''];
 		this.siteTable = $('#siteTable');
 
@@ -158,9 +159,12 @@ export class RedditHybridSort {
 			thingsList.forEach((list,sortIdx)=>{
 				if (list.length > thingIdx) {
 					const thing = list[thingIdx];
-					this.siteTable.insertBefore(thing, this.loadMore);
-					if (!first) {
-						first = thing;
+					if (this.thingIds.indexOf(thing.id) == -1) {
+						this.thingIds.push(thing.id);
+						this.siteTable.insertBefore(thing, this.loadMore);
+						if (!first) {
+							first = thing;
+						}
 					}
 				}
 			});
